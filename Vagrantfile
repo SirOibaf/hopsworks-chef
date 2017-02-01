@@ -109,7 +109,7 @@ Vagrant.configure("2") do |c|
         "default" => {
             "private_ips" => ["10.0.2.15"]
         },
-        "email" => "dela1@gmail.com",
+        "email" => "hopsworks@gmail.com",
         "war_url" => "http://snurran.sics.se/hops/hopsworks-0.1.0.war",
         "user_envs" => "false",
         "domain" => "193.10.66.104",
