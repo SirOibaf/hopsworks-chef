@@ -236,22 +236,27 @@ Vagrant.configure("2") do |c|
           "private_ips" => ["10.0.2.15"]
 	       },
      },
-     "dela" => {
-        "port" => "40100",
-        "stun_port1" => "40200",
-        "stun_port2" => "40300",
-        "http_port" => "40400",
-	"user" => "glassfish",
-        "group" => "glassfish",
-	"hops" => { 
-		"baseEndpoint" => "HDFS"
-	},
-	"stun_servers_ip" => ["193.10.64.107","193.10.64.85"],
-	"stun_servers_id" => ["1","2"],
-        "default" => { 
-          "private_ips" => ["10.0.2.15"]
+    "dela" => {
+      "port" => "40100",
+      "stun_port1" => "40200",
+      "stun_port2" => "40300",
+      "http_port" => "40400",
+      "user" => "glassfish",
+      "group" => "glassfish",
+      "hops" => { 
+        "storage" => {
+          "type" => "HDFS"
         },
-     },
+        "library" => {
+          "type" => "DISK"
+        }
+      },
+      "stun_servers_ip" => ["193.10.64.107","193.10.64.85"],
+      "stun_servers_id" => ["1","2"],
+      "default" => { 
+        "private_ips" => ["10.0.2.15"]
+      },
+    },
      "hops_site" => {
         "domain" => "193.10.66.104",
         "public_port" => 8080, 
