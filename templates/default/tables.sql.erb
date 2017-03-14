@@ -1017,8 +1017,6 @@ CREATE TABLE `jupyter_project` (
   FOREIGN KEY (`hdfs_user_id`) REFERENCES `hops`.`hdfs_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
   ) ENGINE=ndbcluster DEFAULT CHARSET=latin1 AUTO_INCREMENT=20000;
 
-
-
 --
 -- Backups for MySQL Cluster
 --
@@ -1028,3 +1026,16 @@ CREATE TABLE `ndb_backup` (
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`backup_id`)
   ) ENGINE=ndbcluster DEFAULT CHARSET=latin1;
+
+--
+-- Dela metadata
+--
+CREATE TABLE `dela` (
+  `id` VARCHAR(200) NOT NULL,
+  `did` INT(11) NOT NULL, 
+  `pid` INT(11) NOT NULL, 
+  `name` VARCHAR(200) NOT NULL, 
+  `status` VARCHAR(52) NOT NULL, 
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`did`) REFERENCES `dataset` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  ) ENGINE=ndbcluster DEFAULT CHARSET=latin1; 
