@@ -251,6 +251,10 @@ Vagrant.configure("2") do |c|
           "type" => "DISK"
         }
       },
+      "mysql" => {
+        "ip" => "10.0.2.15",
+        "port" => "3306" 
+      },
       "stun_servers_ip" => ["193.10.64.107","193.10.64.85"],
       "stun_servers_id" => ["1","2"],
       "default" => { 
