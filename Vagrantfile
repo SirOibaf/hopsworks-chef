@@ -11,8 +11,9 @@ Vagrant.configure("2") do |c|
     c.cache.enable :apt
     c.cache.enable :gem    
   end
-  c.vm.box = "opscode-ubuntu-14.04"
-  c.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-14.04_chef-provisionerless.box"
+  c.vm.box = "bento/ubuntu-16.04"
+#  c.vm.box = "opscode-ubuntu-14.04"
+#  c.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-14.04_chef-provisionerless.box"
 #   c.vm.box = "bento/centos-7.2"
 #  c.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64/versions/20150924.0.0/providers/virtualbox.box"
 #  c.vm.hostname = "default-ubuntu-1404.vagrantup.com"
@@ -78,15 +79,14 @@ Vagrant.configure("2") do |c|
      chef.cookbooks_path = "cookbooks"
      chef.json = {
      "ntp" => {
-          "install" => "true"
+          "install" => "true",
+#          "user" => "glassfish",
      },
-     "mysql" => {
+     "install" => {
           "dir" => "/srv/hops"
      },
      "ndb" => {
-          "user" => "glassfish",
-          "group" => "glassfish",
-          "dir" => "/srv/hops",
+          "user" => "mysql",
           "mgmd" => { 
 	       "private_ips" => ["10.0.2.15"]
 	       },
@@ -120,7 +120,6 @@ Vagrant.configure("2") do |c|
      "zeppelin" => {
           "user" => "glassfish",
           "group" => "glassfish",
-          "dir" => "/srv/hops",
 	  "default" =>      { 
 	       "private_ips" => ["10.0.2.15"]
 	       },
@@ -128,7 +127,6 @@ Vagrant.configure("2") do |c|
      "elastic" => {
           "user" => "glassfish",
           "group" => "glassfish",
-          "dir" => "/srv/hops",
 	  "default" =>      { 
 	       "private_ips" => ["10.0.2.15"]
 	       },
@@ -162,15 +160,12 @@ Vagrant.configure("2") do |c|
 		 "mr" => {
 		      "user" => "glassfish"
                  },
-                 "data_dir" => "/srv/hops/hopsdata",
       },
      "flink"  =>    {
-          "dir" => "/srv/hops",
 	  "user" => "glassfish",
           "group" => "glassfish",
      },
      "adam"  =>    {
-          "dir" => "/srv/hops",
 	  "user" => "glassfish",
           "group" => "glassfish",
      },
@@ -178,7 +173,6 @@ Vagrant.configure("2") do |c|
 	  "version" => "2.1.0",
 	  "user" => "glassfish",
           "group" => "glassfish",
-          "dir" => "/srv/hops",
 	  "master" =>    { 
                "private_ips" => ["10.0.2.15"]
           },
@@ -189,7 +183,6 @@ Vagrant.configure("2") do |c|
      "kzookeeper" => {
 	  "user" => "glassfish",
           "group" => "glassfish",
-          "dir" => "/srv/hops",
 	  "default" =>      { 
           "private_ips" => ["10.0.2.15"]
 	       },
@@ -197,7 +190,6 @@ Vagrant.configure("2") do |c|
      "livy" => {
 	  "user" => "glassfish",
           "group" => "glassfish",
-          "dir" => "/srv/hops",
 	  "default" =>      { 
           "private_ips" => ["10.0.2.15"]
 	       },
@@ -205,7 +197,6 @@ Vagrant.configure("2") do |c|
      "epipe" => {
 	  "user" => "glassfish",
           "group" => "glassfish",
-          "dir" => "/srv/hops",
 	  "default" =>      { 
           "private_ips" => ["10.0.2.15"]
 	       },
@@ -216,26 +207,25 @@ Vagrant.configure("2") do |c|
 	       },
      },
      "hopsmonitor" => {
-          "dir" => "/srv/hops",
 	  "default" =>      { 
           "private_ips" => ["10.0.2.15"]
 	       },
      },
      "hopslog" => {
-          "dir" => "/srv/hops",
      },
      "drelephant" => {
 	  "user" => "glassfish",
           "group" => "glassfish",
-          "dir" => "/srv/hops",
 	  "default" =>      { 
           "private_ips" => ["10.0.2.15"]
 	       },
      },
      "kagent" => {
+          "network" => {
+                   "interface" => "enp0s3"
+          },
 	  "user" => "glassfish",
           "group" => "glassfish",
-          "dir" => "/srv/hops",
           "allow_ssh_access" => "true",
           "enabled" => "true",
 	  "default" =>      { 
@@ -245,7 +235,6 @@ Vagrant.configure("2") do |c|
      "kkafka" => {
 	  "user" => "glassfish",
           "group" => "glassfish",
-          "dir" => "/srv/hops",
 	  "default" =>      { 
           "private_ips" => ["10.0.2.15"]
 	       },
@@ -318,7 +307,7 @@ Vagrant.configure("2") do |c|
       chef.add_recipe "epipe::default"
       chef.add_recipe "kzookeeper::default"
       chef.add_recipe "adam::default"
-      chef.add_recipe "drelephant::default"
+#      chef.add_recipe "drelephant::default"
       chef.add_recipe "kagent::default"
       chef.add_recipe "dela::default"
       chef.add_recipe "kkafka::default"
