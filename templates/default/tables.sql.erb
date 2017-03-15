@@ -1036,6 +1036,8 @@ CREATE TABLE `dela` (
   `pid` INT(11) NOT NULL, 
   `name` VARCHAR(200) NOT NULL, 
   `status` VARCHAR(52) NOT NULL, 
+  `stream` VARCHAR(52) NOT NULL, 
+  `partners` VARCHAR(52) NOT NULL, 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`did`) REFERENCES `dataset` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
   ) ENGINE=ndbcluster DEFAULT CHARSET=latin1; 
