@@ -104,7 +104,6 @@ Vagrant.configure("2") do |c|
           "enabled" => "true",
      },
      "hopsworks" => {
-        "dir" => "/srv/hops",
         "domains_dir" => "/srv/hops",
         "default" => {
             "private_ips" => ["10.0.2.15"]
@@ -134,7 +133,6 @@ Vagrant.configure("2") do |c|
      "public_ips" => ["10.0.2.15"],
      "private_ips" => ["10.0.2.15"],
      "hops"  =>    {
-         "dir" => "/srv/hops",
 	 "use_hopsworks" => "true",
 	         "rm" =>    { 
 	      "private_ips" => ["10.0.2.15"]
@@ -246,7 +244,6 @@ Vagrant.configure("2") do |c|
         "http_port" => "40400",
 	"user" => "glassfish",
         "group" => "glassfish",
-        "dir" => "/srv/hops",
 	"hops" => { 
 		"baseEndpoint" => "HDFS"
 	},
