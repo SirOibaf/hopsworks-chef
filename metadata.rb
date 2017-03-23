@@ -59,10 +59,10 @@ attribute "java/install_flavor",
           :display_name =>  "Oracle (default) or openjdk",
           :type => 'string'
 
-attribute "hopsworks/twofactor_auth",
-          :description => "twofactor_auth (default: false)",
-          :type => 'string',
-          :required => "required"
+attribute "kapacitor/notify/email",
+          :description => "Email address. Recommended to use a gmail account",
+          :required => "required",
+          :type => 'string'
 
 attribute "hopsworks/gmail/email",
           :description => "Email address. Recommended to use a gmail account",
@@ -1655,3 +1655,33 @@ attribute "dela/dir",
           :description => "dela Installation directory.",
           :type => 'string'
 
+
+
+#
+#
+# SMTP
+#
+#
+
+
+attribute "smtp/host",
+          :description => "Ip Address/hostname of SMTP server (default is smtp.gmail.com)",
+          :type => 'string'
+
+attribute "smtp/port",
+          :description => "Port of SMTP server (default is 587)",
+          :type => 'string'
+
+attribute "smtp/ssl_port",
+          :description => "SSL port of SMTP server (default is 465)",
+          :type => 'string'
+
+attribute "smtp/email",
+          :description => "Email account to send notifications from. ",
+          :required => "required",
+          :type => 'string'
+
+attribute "smtp/email_password",
+          :description => "Password for email account. ",
+          :required => "required",
+          :type => 'string'
