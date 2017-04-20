@@ -18,7 +18,7 @@ cookbook 'adam', github: "biobankcloud/adam-chef", branch: "master"
 cookbook 'dela', github: "hopshadoop/dela-chef", branch: "master"
 
 cookbook 'kzookeeper', github: "hopshadoop/kzookeeper", branch: "master"
-cookbook 'kkafka', github: "hopshadoop/kafka-cookbook", branch: "master"
+cookbook 'kkafka', github: "hopshadoop/kafka-cookbook", branch: "0.10.2.0"
 cookbook 'elastic', github: "hopshadoop/elasticsearch-chef", branch: "master"
 
 cookbook 'hopslog', github: "hopshadoop/hopslog-chef", branch: "master"
