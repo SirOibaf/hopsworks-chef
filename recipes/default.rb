@@ -1057,6 +1057,7 @@ template "#{rows_path}" do
                 :mysql_dir => node.mysql.dir + "/mysql",
                 :elastic_dir => node.elastic.dir + "/elastic",
                 :hopsworks_dir => domains_dir,
+                :hopsworks_user => node.hopsworks.user,                
                 :twofactor_auth => node.hopsworks.twofactor_auth,
                 :twofactor_exclude_groups => node.hopsworks.twofactor_exclude_groups,
                 :elastic_user => node.elastic.user,
@@ -1451,3 +1452,54 @@ end
   end
 
 
+
+#
+# https://github.com/jupyter-incubator/sparkmagic
+#
+bash "jupyter-sparkmagic" do
+    user "root"
+    code <<-EOF
+    set -e
+    pip install jupyter
+    pip install sparkmagic
+    jupyter nbextension enable --py --sys-prefix widgetsnbextension 
+EOF
+end
+
+pythondir=""
+case node['platform']
+ when 'debian', 'ubuntu'
+# "/usr/lib/python2.7/dist-packages"
+  pythondir="/usr/local/lib/python2.7/dist-packages"
+ when 'redhat', 'centos', 'fedora'
+  pythondir="/usr/lib/python2.7/site-packages"
+end
+
+bash "jupyter-sparkmagic-kernels" do
+  user "root"
+  code <<-EOF
+    set -e
+    cd #{pythondir}
+    jupyter-kernelspec install sparkmagic/kernels/sparkkernel
+    jupyter-kernelspec install sparkmagic/kernels/pysparkkernel
+    jupyter-kernelspec install sparkmagic/kernels/pyspark3kernel
+    jupyter-kernelspec install sparkmagic/kernels/sparkrkernel
+    
+    jupyter serverextension enable --py sparkmagic
+    mkdir -p #{node.hopsworks.domains_dir}/.sparkmagic
+    chown #{node.glassfish.user}:#{node.glassfish.group} #{node.hopsworks.domains_dir}/.sparkmagic
+   EOF
+end
+
+
+
+
+template "#{node.hopsworks.domains_dir}/.sparkmagic/config.json" do
+  source "config.json.erb"
+  owner node.glassfish.user
+  mode 0750
+  action :create
+  variables({
+               :livy_ip => livy_ip
+  })
+end
