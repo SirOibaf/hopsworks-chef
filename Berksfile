@@ -27,7 +27,7 @@ cookbook 'glassfish', github: "hopshadoop/chef-glassfish", branch: "master"
 
 cookbook 'ulimit', github: "hopshadoop/chef-ulimit", branch: "master"
 
-cookbook 'hive2', github: "hopshadoop/hive-chef", branch: "master"
+cookbook 'hive2', github: "siroibaf/hive-chef", branch: "master"
 
 cookbook 'graphite', '~> 1.0.4'
 cookbook 'simple-logstash', '~> 0.2.4'
