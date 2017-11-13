@@ -281,3 +281,10 @@ INSERT INTO variables VALUES ("hiveserver_ext_hostname", "<%= @hiveext_hostname 
 INSERT INTO variables VALUES ("hive_warehouse", "<%= @hive_warehouse%>");
 INSERT INTO variables VALUES ("hive_scratchdir", "<%= @hive_scratchdir%>");
 INSERT INTO variables VALUES ("hive_superuser", "<%= node['hive2']['user'] %>");
+
+--
+-- Services
+--
+
+INSERT INTO variables VALUES ("jupyter_enabled", "default");
+INSERT INTO variables VALUES ("jobs_enabled", "default");
