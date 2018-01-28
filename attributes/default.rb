@@ -71,6 +71,8 @@ default['hopsworks']['ear_url']                  = "#{node['download_url']}/hops
 
 default['hopsworks']['twofactor_auth']              = "false"
 default['hopsworks']['twofactor_exclude_groups']    = "AGENT;CLUSTER_AGENT" #semicolon separated list of roles
+default['hopsworks']['blacklist_users']             = "devices@hops.io" #comma-separated list of users that are not allowed to login
+
 
 default['hopsworks']['service_key_rotation_enabled'] = "false"
 ## Suffix can be: (defaults to minutes if omitted)
