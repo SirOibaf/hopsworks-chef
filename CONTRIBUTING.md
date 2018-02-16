@@ -13,4 +13,4 @@ Issues can be reported using GitHub (https://github.com/hopshadoop/hopsworks-che
 
 ## License
 
-By contributing to this repo, you agree that your contributions will be licensed under the [Apache License Version 2.0 (APLv2)](LICENSE).
+By contributing to this repo, you agree that your contributions will be licensed under the [GNU Affero GPL 3](LICENSE).

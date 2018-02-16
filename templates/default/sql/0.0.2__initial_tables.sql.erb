@@ -1,3 +1,18 @@
+-- Copyright (C) 2014 - 2018 Logical Clocks AB. All rights reserved.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Affero General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Affero General Public License for more details.
+--
+-- You should have received a copy of the GNU Affero General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 CREATE TABLE IF NOT EXISTS `bbc_group` (
     `group_name` VARCHAR(20) NOT NULL,
     `group_desc` VARCHAR(200) DEFAULT NULL,
@@ -28,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `notes` VARCHAR(500)  DEFAULT '-',
     `mobile` VARCHAR(15)  DEFAULT '-',
     `max_num_projects` INT(11) NOT NULL,
-    `num_active_projects` INT(11) NOT NULL DEFAULT '0',    
+    `num_active_projects` INT(11) NOT NULL DEFAULT '0',
     `num_created_projects` INT(11) NOT NULL DEFAULT '0',
     `two_factor` tinyint(1) NOT NULL DEFAULT '1',
     `tours_state` tinyint(1) NOT NULL DEFAULT '0',
@@ -167,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `jupyter_settings` (
   `secret` VARCHAR(255) NOT NULL,
   `log_level` VARCHAR(32) NULL DEFAULT 'INFO',
   `mode` VARCHAR(32) NOT NULL,
-  `umask` VARCHAR(32) DEFAULT '022',  
+  `umask` VARCHAR(32) DEFAULT '022',
   `advanced` tinyint(1) DEFAULT '0',
   `archives` VARCHAR(1500) DEFAULT '',
   `jars` VARCHAR(1500) DEFAULT '',

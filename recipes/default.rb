@@ -1,3 +1,17 @@
+# Copyright (C) 2014 - 2018 Logical Clocks AB. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 domain_name="domain1"
 domains_dir = node['hopsworks']['domains_dir']
@@ -335,7 +349,7 @@ for version in versions do
                 :hive_warehouse => "#{node['hive2']['hopsfs_dir']}/warehouse",
                 :hive_scratchdir => node['hive2']['scratch_dir']
            })
-    action :create_if_missing    
+    action :create_if_missing
   end
 
   #
@@ -344,7 +358,7 @@ for version in versions do
   #file "#{theDomain}/flyway/undo/U#{previous_version}__undo.sql" do
   #  action :delete
   #end
-  
+
   template "#{theDomain}/flyway/undo/U#{version}__undo.sql" do
     source "sql/undo/#{version}__undo.sql.erb"
     owner node['glassfish']['user']
@@ -407,7 +421,7 @@ hopsworks_grants "reload_sysv" do
 end
 
 
-# if node['install']['upgrade'] == "true" 
+# if node['install']['upgrade'] == "true"
 # end
 
 
@@ -418,7 +432,7 @@ bash "flyway_baseline" do
     cd #{theDomain}/flyway
     #{theDomain}/flyway/flyway baseline
   EOF
- not_if "#{node['ndb']['scripts_dir']}/mysql-client.sh hopsworks -e 'show tables' | grep flyway_schema_history"  
+ not_if "#{node['ndb']['scripts_dir']}/mysql-client.sh hopsworks -e 'show tables' | grep flyway_schema_history"
 end
 
 bash "flyway_migrate" do
@@ -860,7 +874,7 @@ glassfish_deployable "hopsworks" do
   secure false
   action :deploy
   async_replication false
-  retries 1  
+  retries 1
   keep_state true
   enabled true
   not_if "#{asadmin} --user #{username} --passwordfile #{admin_pwd}  list-applications --type web | grep -w \"hopsworks-web:#{node['hopsworks']['version']}\""
@@ -872,7 +886,7 @@ glassfish_deployable "hopsworks-ca" do
   target "server"
   url node['hopsworks']['ca_url']
   version node['hopsworks']['version']
-  context_root "/hopsworks-ca"  
+  context_root "/hopsworks-ca"
   domain_name domain_name
   password_file "#{domains_dir}/#{domain_name}_admin_passwd"
   username username

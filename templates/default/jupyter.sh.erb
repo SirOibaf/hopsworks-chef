@@ -1,5 +1,20 @@
 #!/bin/bash
 
+# Copyright (C) 2014 - 2018 Logical Clocks AB. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 # This script allows Hopsworks to start/kill/ping (check if alive) a Jupyter Notebook Server.
 # There will be 1 notebook-server per ProjectUser.
 # This script can be run by hopsworks (running as user 'glassfish') as a sudo command whereupon
@@ -57,7 +72,7 @@ if [ "$1" == "kill" ] ; then
             sudo rm -rf ${2}/../*
 	fi
     fi
-    
+
 elif [ "$1" == "start" ] ; then
 
     if [ $# -ne 8 ]; then
@@ -82,7 +97,7 @@ elif [ "$1" == "start" ] ; then
 	echo "Invalid Anaconda environment directory: $5"
 	exit 3
     fi
-    
+
     re='^[0-9]+$'
     if ! [[ $6 =~ $re ]] ; then
       echo "error: Not a number" >&2
@@ -110,7 +125,7 @@ elif [ "$1" == "start" ] ; then
 #	echo "Invalid secret_dir parameter, doesn't look like a path: $8"
 #	exit 4
 #    fi
-    
+
     parent=$(dirname $8)
     sudo chown -R ${HOPSWORKS_USER}:${JUPYTER_GROUP} $parent
     sudo chmod 0730 $parent
@@ -121,7 +136,7 @@ elif [ "$1" == "start" ] ; then
     fi
     sudo chmod -R 770 $8
     sudo chown -R ${JUPYTER_USER}:${JUPYTER_GROUP} $8
-    
+
     # These files below were created by hopsworks. Change ownership now to Jupyter (if needed)
     #    sudo chown -R ${JUPYTER_USER}:${JUPYTER_GROUP} $2
     # Make the group of the files, the jupyter group so that they can write to the files
@@ -130,10 +145,10 @@ elif [ "$1" == "start" ] ; then
 	echo "Error: could not change ownership of config_dir for Jupyter: $2"
 	exit 1
     fi
-    sudo chmod 0730 $2/..    
+    sudo chmod 0730 $2/..
     sudo chown -R ${JUPYTER_USER}:${JUPYTER_GROUP} $2
     sudo chmod -R 770 $2
-     
+
     # Launch the jupyter notebook
     su ${JUPYTER_USER} -c "${DOMAINS_DIR}/domain1/bin/jupyter-launch.sh $2 $3 $4 $5 $6 $7 $8"
 
@@ -149,7 +164,7 @@ elif [ "$1" == "ping" ] ; then
     fi
     kill -0 $2
 
-# list 
+# list
 elif [ "$1" == "list" ] ; then
     # This command will output line-separated PIDs for all running jupyter-notebooks into the tmp file, from where it is read by Hopsworks
     sudo ps -ef | grep -v 'grep' | grep -i jupyter-notebook | awk '{print $2}' > /tmp/jupyterNotebookServer.pids
@@ -165,13 +180,13 @@ elif [ "$1" == "kernel-add" ] ; then
 # echo ${stringZ%__*} # prints proj
     JUPYTER_HOME=$2
     PROJ_USER=$3
-    PROJECT=${PROJ_USER%__*}	
-    
+    PROJECT=${PROJ_USER%__*}
+
     if [ ! -d /usr/local/share/jupyter/kernels/python-${PROJ_USER} ] ; then
        sudo ${DOMAINS_DIR}/domain1/bin/jupyter-kernel-install.sh $EXEC_AS_ANACONDA_USER $PROJECT $PROJ_USER $CONDA_DIR $JUPYTER_HOME
     fi
- 
-#   This function can remove either an individual user with the 'hdfsusername' or all users in a project with 'projectname*' 
+
+#   This function can remove either an individual user with the 'hdfsusername' or all users in a project with 'projectname*'
 elif [ "$1" == "kernel-remove" ] ; then
     if [[ $2 == *".."* ]]; then
 	echo "Injection Attack when removing python kernel with name python-$2 ?"
@@ -186,7 +201,7 @@ elif [ "$1" == "kernel-remove" ] ; then
 	echo "Invalid KERNEL directory: $2"
 	exit 2
     fi
-    
+
     sudo rm -rf ${KERNELS_DIR}/python-${2}
 else
   help

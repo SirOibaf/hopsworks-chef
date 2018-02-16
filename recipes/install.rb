@@ -1,3 +1,18 @@
+# Copyright (C) 2014 - 2018 Logical Clocks AB. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 require 'json'
 require 'base64'
 require 'digest'
@@ -683,7 +698,7 @@ template "/etc/sudoers.d/glassfish" do
               :delete_projectcert =>  "#{ca_dir}/intermediate/deleteprojectcerts.sh",
               :ndb_backup =>  "#{theDomain}/bin/ndb_backup.sh",
               :jupyter =>  "#{theDomain}/bin/jupyter.sh",
-              :tfserving =>  "#{theDomain}/bin/tfserving.sh",              
+              :tfserving =>  "#{theDomain}/bin/tfserving.sh",
               :jupyter_cleanup =>  "#{theDomain}/bin/jupyter-project-cleanup.sh",
               :jupyter_kernel =>  "#{theDomain}/bin/jupyter-install-kernel.sh",
               :global_ca_sign =>  "#{theDomain}/bin/global-ca-sign-csr.sh",
@@ -832,7 +847,7 @@ template "#{theDomain}/flyway/conf/flyway.conf" do
   variables({
               :mysql_host => mysql_host
             })
-  action :create  
+  action :create
 end
 
 

@@ -1,6 +1,21 @@
+# Copyright (C) 2014 - 2018 Logical Clocks AB. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 #
 # For the Hopsworks Virtualbox Instance, autologin and autostart a browser.
-# Only for Ubuntu 
+# Only for Ubuntu
 #
 
 package 'lightdm'
@@ -22,7 +37,7 @@ end
 #
 # Firefox desktop entry should start after hops-services.desktop.
 # Change firefox name to 'x' so that it starts last.
-#  
+#
 template "/home/#{node['glassfish']['user']}/.config/autostart/x-firefox.desktop" do
     source "virtualbox/firefox.desktop.erb"
     owner node['glassfish']['user']
@@ -38,20 +53,20 @@ template "/home/#{node['glassfish']['user']}/.config/autostart/hops-services.des
 end
 
 
-  
+
 template "/etc/init/tty1.conf" do
     source "virtualbox/tty.conf.erb"
     owner "root"
     mode 0644
     action :create
-end 
-  
+end
+
 template "/etc/lightdm/lightdm.conf" do
     source "virtualbox/lightdm.conf.erb"
     owner "root"
     mode 0644
     action :create
-end 
+end
 
 
 

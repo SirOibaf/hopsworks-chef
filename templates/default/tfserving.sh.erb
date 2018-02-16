@@ -1,5 +1,21 @@
 #!/bin/bash
 
+# Copyright (C) 2014 - 2018 Logical Clocks AB. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 # This script allows Hopsworks to start/kill/ping (check if alive) a TensorFlow Serving Process.
 # There will be 1 tf-serving process per ProjectUser.
 # This script can be run by hopsworks (running as user 'glassfish') as a sudo command whereupon
@@ -24,7 +40,7 @@ if [ "$1" == "kill" ] ; then
     if [ $# -ne 5 ]; then
 	help
     fi
-    
+
     # Sanity checks for injection attacks
     re='^[0-9]+$'
     if ! [[ $3 =~ $re ]] ; then
@@ -42,7 +58,7 @@ if [ "$1" == "kill" ] ; then
 	echo "Invalid SECRET_DIR directory: $5"
 	exit 1
     fi
-     
+
     su ${TFSERVING_USER} -c "${DOMAINS_DIR}/domain1/bin/tfserving-kill.sh $2 $3 $4 $5"
 
     rm -rf $5
@@ -73,7 +89,7 @@ elif [ "$1" == "start" ] ; then
     fi
     sudo mkdir -p $SECRET_DIR
     sudo chown $TFSERVING_USER $SECRET_DIR
-    
+
     pid=$(sudo ps -ef | grep tensorflow_model_server | grep "port=$5" | awk '{print $2}')
 
     if [ "$pid" != "" ] ; then
@@ -91,7 +107,7 @@ elif [ "$1" == "start" ] ; then
     fi
     sudo chmod -R 770 $SECRET_DIR
     sudo chown -R ${TFSERVING_USER}:${TFSERVING_GROUP} $SECRET_DIR
-    
+
     # Launch the tensorflow_serving process as user 'tfserving'
     su ${TFSERVING_USER} -c "${DOMAINS_DIR}/domain1/bin/tfserving-launch.sh $2 $3 $4 $5 $6 $7"
 
@@ -109,12 +125,12 @@ elif [ "$1" == "ping" ] ; then
     fi
     kill -0 $2
 
-# list 
+# list
 elif [ "$1" == "list" ] ; then
     # This command will output line-separated PIDs for all running jupyter-notebooks into the tmp file, from where it is read by Hopsworks
     sudo ps -ef | grep -v 'grep' | grep -i tensorflow_model_server | awk '{print $2}' > /tmp/tensorflow_model_server.pids
 
-# killhard PID    
+# killhard PID
 elif [ "$1" == "killhard" ] ; then
     sudo ps -ef | grep -v 'grep' | grep -i tensorflow_model_server | grep $2
     if [ $? -ne 0 ] ; then

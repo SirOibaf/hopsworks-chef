@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
 
+# Copyright (C) 2014 - 2018 Logical Clocks AB. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 LOGS_DIR=<%= @weblogs_dir %>
 HADOOP_HOME=<%= node['hops']['base_dir'] %>
 HDFS_WEBLOGS_DIR=<%= @remote_weblogs_dir %>
@@ -53,7 +68,7 @@ do
 	    failed_exit "Failed to create directory $REMOTE_DIR. Exiting..." 1
 	fi
     fi
-    
+
     full_remote_file=$REMOTE_DIR/$filename
     printer "Copying file $log_file"
     # Check if the file already exists. If it does then Glassfish has appended to that
@@ -64,7 +79,7 @@ do
 	printer "File $log_file already exist, removing it and putting the new"
 	$HADOOP_HOME/bin/hdfs dfs -rm -f $full_remote_file
     fi
-    
+
     $HADOOP_HOME/bin/hdfs dfs -copyFromLocal $log_file $REMOTE_DIR
     if [ $? -ne 0 ]
     then

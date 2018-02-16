@@ -1,12 +1,27 @@
 #!/bin/bash
 
+# Copyright (C) 2014 - 2018 Logical Clocks AB. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 set -e
 
 if [ $# -ne 1 ] ; then
     echo "Usage: $0 BRANCH"
     exit 2
 fi
-# Check that the branch name is HOPS-[0-9]+    
+# Check that the branch name is HOPS-[0-9]+
 
 SCRIPTNAME=`basename $0`
 SCRIPTDIR=`pwd`
@@ -40,10 +55,10 @@ checkout()
     echo "new version is: $NEW_VERSION"
     perl -pi -e 's/$VERSION/$NEW_VERSION/g' metadata.rb
     git commit -am 'bump version to $NEW_VERSION'
-    git push -u origin $BRANCH    
+    git push -u origin $BRANCH
     popd
     perl -pi -e 's/$VERSION/$NEW_VERSION/g' Berksfile
-    echo "${REPO}\n" >> .${BRANCH}    
+    echo "${REPO}\n" >> .${BRANCH}
 }
 
 update_hopsworks()
@@ -54,7 +69,7 @@ update_hopsworks()
 
 clear_screen()
 {
- echo "" 
+ echo ""
  echo "Press ENTER to continue"
  read cont < /dev/tty
  clear
@@ -62,9 +77,9 @@ clear_screen()
 
 clone()
 {
-  echo ""    
+  echo ""
   echo "Could not find $COOKBOOK in the directory  $BASEDIR "
-  echo "" 
+  echo ""
   printf "Do you want to clone $COOKBOOK into the directory $BASEDIR ? [ yes or no ] "
   read ACCEPT
   case $ACCEPT in
@@ -76,8 +91,8 @@ clone()
       exit 2
       ;;
     *)
-      echo "" 
-      printf "Please enter either 'yes' or 'no'." 
+      echo ""
+      printf "Please enter either 'yes' or 'no'."
       clone
     ;;
   esac
@@ -99,7 +114,7 @@ if [ ! -d $BASEDIR/karamel-chef ] ; then
     echo "git clone git@github.com:hopshadoop/karamel-chef.git"
     echo ""
     exit 12
-fi    
+fi
 
 echo "Creating a new cluster configuration for $USER in karamel-chef from karamel-chef/cluster-defns/1.template.yml"
 echo "New cluster configuration:"
@@ -109,18 +124,18 @@ cp -f $BASEDIR/karamel-chef/cluster-defns/1.template.yml $BASEDIR/karamel-chef/c
 if [ $? -ne 0 ] ; then
     echo "Error copying cluster configuration file"
     exit 11
-fi    
+fi
 perl -pi -e "s/MASTER_BRANCH/${BRANCH}/" $BASEDIR/karamel-chef/cluster-defns/1.${USER}.yml
 if [ $? -ne 0 ] ; then
     echo "Error editing cluster configuration file"
     exit 12
-fi    
+fi
 
 perl -pi -e "s/THEUSER/${USER}/" $BASEDIR/karamel-chef/cluster-defns/1.${USER}.yml
 if [ $? -ne 0 ] ; then
     echo "Error editing cluster configuration file"
     exit 13
-fi    
+fi
 
 FINISHED=0
 
@@ -161,75 +176,75 @@ while [ $FINISHED -eq 0 ]; do
 	    ;;
 	1 | conda)
 	    COOKBOOK="conda"
-	    REPO="conda-chef"    
+	    REPO="conda-chef"
 	    ;;
 	2 | kagent)
 	    COOKBOOK="kagent"
-	    REPO="kagent-chef"    
+	    REPO="kagent-chef"
 	    ;;
 	3 | hops)
 	    COOKBOOK="hops"
-	    REPO="hops-hadoop-chef"    
+	    REPO="hops-hadoop-chef"
 	    ;;
 	4 | ndb)
 	    COOKBOOK="ndb"
-	    REPO="ndb-chef"    
+	    REPO="ndb-chef"
 	    ;;
 	5 |  hadoop_spark)
 	    COOKBOOK="hadoop_spark"
-	    REPO="spark-chef"    
+	    REPO="spark-chef"
 	    ;;
 	6 | flink)
 	    COOKBOOK="flink"
-	    REPO="flink-chef"    
+	    REPO="flink-chef"
 	    ;;
 	7 | zeppelin)
 	    COOKBOOK="zeppelin"
-	    REPO="zeppelin-chef"    
+	    REPO="zeppelin-chef"
 	    ;;
 	8 | livy)
 	    COOKBOOK="livy"
-	    REPO="livy-chef"    
+	    REPO="livy-chef"
 	    ;;
 	9 | drelephant)
 	    COOKBOOK="drelephant"
-	    REPO="drelephant-chef"    
+	    REPO="drelephant-chef"
 	    ;;
 	10| tensorflow)
 	    COOKBOOK="tensorflow"
-	    REPO="tensorflow-chef"    
+	    REPO="tensorflow-chef"
 	    ;;
 	11| epipe)
 	    COOKBOOK="epipe"
-	    REPO="epipe-chef"    
+	    REPO="epipe-chef"
 	    ;;
 	12| dela)
 	    COOKBOOK="dela"
-	    REPO="dela-chef"    
+	    REPO="dela-chef"
 	    ;;
 	13| kzookeeper)
 	    COOKBOOK="kzookeeper"
-	    REPO="kzookeeper"    
+	    REPO="kzookeeper"
 	    ;;
 	14| kkafka)
 	    COOKBOOK="kkafka"
-	    REPO="kafka-chef"    
+	    REPO="kafka-chef"
 	    ;;
 	15| elastic)
 	    COOKBOOK="elastic"
-	    REPO="elastic-chef"    
+	    REPO="elastic-chef"
 	    ;;
 	16| hopslog)
 	    COOKBOOK="hopslog"
-	    REPO="hopslog-chef"    
+	    REPO="hopslog-chef"
 	    ;;
 	17| hopsmonitor)
 	    COOKBOOK="hopsmonitor"
-	    REPO="hopsmonitor-chef"    
+	    REPO="hopsmonitor-chef"
 	    ;;
 	18| hive)
 	    COOKBOOK="hive2"
-	    REPO="hive-chef"    
+	    REPO="hive-chef"
 	    ;;
 	*)
 	    echo ""
@@ -239,7 +254,7 @@ while [ $FINISHED -eq 0 ]; do
 
     if [ "$REPO" != "" ] ; then
       echo "Cookbook chosen: $COOKBOOK"
-	
+
       echo ""
       if [ ! -d ../$COOKBOOK ] ; then
  	clone

@@ -2,31 +2,46 @@
 #
 ### BEGIN INIT INFO
 # Provides:          glassfish
-# Required-Start:    
-# Required-Stop:     
+# Required-Start:
+# Required-Stop:
 # Should-Start:      $network $time
 # Should-Stop:       $network $time
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start and stop a glassfish domain server 
-# Description:       Controls the main glassfish domain server 
+# Short-Description: Start and stop a glassfish domain server
+# Description:       Controls the main glassfish domain server
 ### END INIT INFO
 #
+# Copyright (C) 2014 - 2018 Logical Clocks AB. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 umask 0077
 
 start() {
   ulimit -n 30000
 #  ulimit -l  2>&1 > /dev/null
   rm -rf <%= node['glassfish']['domains_dir'] %>/<%= @domain_name %>/osgi-cache/*
-  su -c "<%= node['glassfish']['base_dir'] %>/versions/current/bin/asadmin --user <%= node['hopsworks']['admin']['user'] %> --passwordfile <%= @password_file %> start-domain --debug false --upgrade false <%= @domain_name %>" <%= node['glassfish']['user'] %> 
+  su -c "<%= node['glassfish']['base_dir'] %>/versions/current/bin/asadmin --user <%= node['hopsworks']['admin']['user'] %> --passwordfile <%= @password_file %> start-domain --debug false --upgrade false <%= @domain_name %>" <%= node['glassfish']['user'] %>
   return $?
 
 }
 
 stop() {
-su -c "<%= node['glassfish']['base_dir'] %>/versions/current/bin/asadmin --user <%= node['hopsworks']['admin']['user'] %> --passwordfile <%= @password_file %> stop-domain <%= @domain_name %>" <%= node['glassfish']['user'] %> 
+su -c "<%= node['glassfish']['base_dir'] %>/versions/current/bin/asadmin --user <%= node['hopsworks']['admin']['user'] %> --passwordfile <%= @password_file %> stop-domain <%= @domain_name %>" <%= node['glassfish']['user'] %>
 res=$?
-id=`ps -ef | grep ASMain` 
+id=`ps -ef | grep ASMain`
 if [ "$id" != "" ] ; then
   ps -ef | awk '/ASMain/{print $2}' | xargs kill 2> /dev/null
   res=$?
@@ -41,7 +56,7 @@ restart() {
   return $?
 }
 
-status() {  
+status() {
   su -s /bin/sh <%= node['glassfish']['user'] %> -c "exec <%= node['glassfish']['base_dir'] %>/versions/current/bin/asadmin list-domains --user <%= node['hopsworks']['admin']['user'] %> --passwordfile <%= @password_file %> --domaindir <%= node['glassfish']['domains_dir'] %>" | grep "<%= @domain_name %> running"
 }
 
