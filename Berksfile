@@ -24,6 +24,9 @@ cookbook 'glassfish', github: "logicalclocks/chef-glassfish", branch: "master"
 cookbook 'hive2', github: "logicalclocks/hive-chef", branch: "master"
 
 cookbook 'ulimit', github: "logicalclocks/chef-ulimit", branch: "master"
+
+cookbook 'kube-hops', github: "siroibaf/kube-hops-chef", branch: "master"
+
 cookbook 'java'
 cookbook 'graphite', '~> 1.0.4'
 cookbook 'simple-logstash', '~> 0.2.4'
