@@ -329,4 +329,11 @@ default['hopsworks']['jwt']['signature_algorithm']   = 'HS512'
 default['hopsworks']['jwt']['lifetime_ms']           = '1800000'
 default['hopsworks']['jwt']['exp_leeway_sec']        = '900'
 default['hopsworks']['jwt']['signing_key_name']      = 'apiKey'
+
+
+#
+# EXPAT
+#
  
+default['hopsworks']['expat_url']                    = "#{node['download_url']}/expat/#{node[node['install']['version']]}/expat-#{node[node['install']['version']]}.tar.gz"
+default['hopsworks']['expat_dir']                    = "#{node['install_dir']}/expat-#{node['install']['version']}"
