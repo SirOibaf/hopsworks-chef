@@ -23,7 +23,7 @@ cookbook 'hopsmonitor', github: "logicalclocks/hopsmonitor-chef", branch: "0.8"
 cookbook 'glassfish', github: "logicalclocks/chef-glassfish", branch: "0.8"
 cookbook 'hive2', github: "logicalclocks/hive-chef", branch: "0.8"
 
-cookbook 'kube-hops', github: "siroibaf/kube-hops-chef", branch: "8"
+cookbook 'kube-hops', github: "siroibaf/kube-chef", branch: "8"
 
 cookbook 'ulimit', github: "logicalclocks/chef-ulimit", branch: "0.8"
 cookbook 'java'
