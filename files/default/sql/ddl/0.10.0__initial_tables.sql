@@ -1880,3 +1880,26 @@ CREATE TABLE IF NOT EXISTS `oauth_login_state` (
     ON UPDATE NO ACTION
 ) ENGINE=ndbcluster DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;
 
+CREATE TABLE IF NOT EXISTS `project_devices` (
+  `project_id` int(11) NOT NULL,
+  `device_uuid` varchar(36) NOT NULL,
+  `password` varchar(64) NOT NULL,
+  `alias` varchar(80) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `state` tinyint(1) NOT NULL DEFAULT '0',
+  `last_logged_in` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`project_id`,`device_uuid`),
+  CONSTRAINT `projects_devices_fk` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=ndbcluster
+  DEFAULT CHARSET=latin
+  COLLATE = latin1_general_cs;
+
+CREATE TABLE IF NOT EXISTS `project_devices_settings` (
+  `project_id` int(11) NOT NULL,
+  `jwt_secret` varchar(128) NOT NULL,
+  `jwt_token_duration` int(11) NOT NULL,
+  PRIMARY KEY (`project_id`),
+  CONSTRAINT `projects_devices_settings_fk` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=ndbcluster
+  DEFAULT CHARSET=latin1
+  COLLATE = latin1_general_cs;

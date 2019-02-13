@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 REPLACE INTO `hopsworks`.`variables` VALUES ("kerberos_auth", "<%= node['kerberos']['enabled'] %>");
 REPLACE INTO `hopsworks`.`variables` VALUES ("ldap_krb_search_filter", "<%= node['ldap']['krb_search_filter'] %>");
 REPLACE INTO `hopsworks`.`variables` VALUES ("ldap_krb_dyn_grp_search_filter", "<%= node['ldap']['krb_dyn_grp_search_filter'] %>");
@@ -30,3 +31,16 @@ REPLACE INTO `hopsworks`.`variables` VALUES ("kagent_liveness_threshold", "<%= n
 REPLACE INTO `hopsworks`.`variables` VALUES ("service_restart_script", "<%= node['hopsworks']['kagent_liveness']['restart_script'] %>");
 REPLACE INTO `hopsworks`.`variables` VALUES ("service_start_script", "<%= node['hopsworks']['kagent_liveness']['start_script'] %>");
 REPLACE INTO `hopsworks`.`variables` VALUES ("service_stop_script", "<%= node['hopsworks']['kagent_liveness']['stop_script'] %>");
+=======
+REPLACE INTO `hopsworks`.`variables` VALUES ("jupyter_shutdown_timer_interval", "<%= node['jupyter']['shutdown_timer_interval'] %>");
+
+INSERT INTO `users` (`uid`, `username`, `password`, `email`, `fname`, `lname`, `activated`, `title`, `orcid`, `false_login`, `isonline`, `secret`, `validation_key`, `security_question`, `security_answer`, `mode`, `password_changed`, `notes`, `mobile`, `status`, `max_num_projects`, `tours_state` , `salt`) VALUES
+(10002, 'devices0', 'fcb581887fcf61bf1a9e3ddd2f64297a9179efdd7ea32443021ea72e1f232b26', 'devices@hops.io', 'Hops', 'Devices', '2015-05-15 10:22:36', 'Mrs', '1234-5678-1234-5678', -1, 0, 'V3WBPS4G2WMQ53VA', NULL, 'PET', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 10, '2015-04-28 15:18:42', NULL, '123456789', 4, 100000, 3, '+9mTLmYSpnZROFEJEaednw8+gDH/s2J1QuRZy8okxW5myI/q8ek8Xu+ab5CyE9GzhWX6Sa4cr7KX8cAHi5IC4g==')
+ON DUPLICATE KEY UPDATE `username`="devices0";
+
+INSERT INTO `address` (`uid`, `address1`, `address2`, `address3`, `city`, `state`, `country`, `postalcode`) VALUES (10002, "<%= @org_city %>", "<%= @org_country_code %>");
+
+REPLACE INTO variables VALUES ("blacklist_users", "<%= node['hopsworks']['blacklist_users'] %>"); 
+
+
+>>>>>>> merge
