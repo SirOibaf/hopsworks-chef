@@ -1891,7 +1891,7 @@ CREATE TABLE IF NOT EXISTS `project_devices` (
   PRIMARY KEY (`project_id`,`device_uuid`),
   CONSTRAINT `projects_devices_fk` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=ndbcluster
-  DEFAULT CHARSET=latin
+  DEFAULT CHARSET=latin1
   COLLATE = latin1_general_cs;
 
 CREATE TABLE IF NOT EXISTS `project_devices_settings` (
