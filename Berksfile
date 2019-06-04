@@ -11,7 +11,7 @@ cookbook 'hadoop_spark', github: "logicalclocks/spark-chef", branch: "systemd_de
 cookbook 'flink', github: "logicalclocks/flink-chef", branch: "master"
 cookbook 'livy', github: "logicalclocks/livy-chef", branch: "master"
 cookbook 'drelephant', github: "logicalclocks/dr-elephant-chef", branch: "master"
-cookbook 'tensorflow', github: "logicalclocks/tensorflow-chef", branch: "HOPSWORKS-1113"
+cookbook 'tensorflow', github: "logicalclocks/tensorflow-chef", branch: "master"
 cookbook 'epipe', github: "logicalclocks/epipe-chef", branch: "systemd_deps"
 cookbook 'dela', github: "logicalclocks/dela-chef", branch: "master"
 cookbook 'kzookeeper', github: "logicalclocks/kzookeeper", branch: "master"
