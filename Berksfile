@@ -21,7 +21,7 @@ cookbook 'hopslog', github: "siroibaf/hopslog-chef", branch: "karamel_ref"
 cookbook 'hopsmonitor', github: "logicalclocks/hopsmonitor-chef", branch: "master"
 cookbook 'glassfish', github: "logicalclocks/chef-glassfish", branch: "master"
 cookbook 'hops_airflow', github: "logicalclocks/airflow-chef", branch: "master"
-cookbook 'hive2', github: "logicalclocks/hive-chef", branch: "master"
+cookbook 'hive2', github: "siroibaf/hive-chef", branch: "karamel_ref"
 
 cookbook 'ulimit', github: "logicalclocks/chef-ulimit", branch: "master"
 cookbook 'java'
