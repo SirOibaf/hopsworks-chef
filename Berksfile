@@ -26,8 +26,6 @@ cookbook 'hive2', github: "siroibaf/hive-chef", branch: "karamel_ref"
 cookbook 'ulimit', github: "logicalclocks/chef-ulimit", branch: "master"
 cookbook 'java'
 
-cookbook 'graphite', '~> 1.0.4'
-cookbook 'simple-logstash', '~> 0.2.4'
 cookbook 'compat_resource', '~> 12.19.0'
 cookbook 'authbind', '~> 0.1.10'
 cookbook 'ntp', '~> 2.0.0'
