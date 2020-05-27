@@ -20,7 +20,7 @@ cookbook 'elastic', github: "siroibaf/elasticsearch-chef", branch: "HOPSWORKS-18
 cookbook 'hopslog', github: "logicalclocks/hopslog-chef", branch: "1.3"
 cookbook 'hopsmonitor', github: "siroibaf/hopsmonitor-chef", branch: "HOPSWORKS-1804"
 cookbook 'hops_airflow', github: "siroibaf/airflow-chef", branch: "HOPSWORKS-1804"
-cookbook 'hive2', github: "logicalclocks/hive-chef", branch: "HOPSWORKS-1797-s"
+cookbook 'hive2', github: "siroibaf/hive-chef", branch: "HOPSWORKS-1797-s"
 cookbook 'consul', github: "logicalclocks/consul-chef", branch: "1.3"
 cookbook 'kube-hops', github: "logicalclocks/kube-hops-chef", branch: "1.3"
 
