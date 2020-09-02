@@ -21,7 +21,7 @@ cookbook 'hopslog', github: "logicalclocks/hopslog-chef", branch: "master"
 cookbook 'hopsmonitor', github: "logicalclocks/hopsmonitor-chef", branch: "master"
 cookbook 'hops_airflow', github: "logicalclocks/airflow-chef", branch: "master"
 cookbook 'hive2', github: "logicalclocks/hive-chef", branch: "master"
-cookbook 'consul', github: "logicalclocks/consul-chef", branch: "master"
+cookbook 'consul', github: "SirOibaf/consul-chef", branch: "systemd-resolved"
 cookbook 'kube-hops', github: "logicalclocks/kube-hops-chef", branch: "master"
 cookbook 'cloud', github: "logicalclocks/cloud-chef", branch: "master"
 
