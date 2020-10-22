@@ -328,6 +328,7 @@ CREATE TABLE `feature_group` (
   `version` int(11) NOT NULL,
   `feature_group_type` INT(11) NOT NULL DEFAULT '0',
   `on_demand_feature_group_id` INT(11) NULL,
+  `streaming_feature_group_id` INT(11) NULL,
   `cached_feature_group_id` INT(11) NULL,
   `desc_stats_enabled` TINYINT(1) NOT NULL DEFAULT '1',
   `feat_corr_enabled` TINYINT(1) NOT NULL DEFAULT '1',
@@ -1894,6 +1895,16 @@ CREATE TABLE IF NOT EXISTS `on_demand_feature_group` (
   ENGINE = ndbcluster
   DEFAULT CHARSET = latin1
   COLLATE = latin1_general_cs;
+
+CREATE TABLE IF NOT EXISTS `streaming_feature_group` (
+  `id`                      INT(11)         NOT NULL AUTO_INCREMENT,
+  `description`             VARCHAR(1000)   NULL,
+  `inode_pid`               BIGINT(20)      NOT NULL,
+  `inode_name`              VARCHAR(255)    NOT NULL,
+  `partition_id`            BIGINT(20)      NOT NULL,
+  `method`                  VARCHAR(255)    NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = ndbcluster DEFAULT CHARSET = latin1 COLLATE = latin1_general_cs;
 
 
 CREATE TABLE IF NOT EXISTS `cached_feature_group` (
