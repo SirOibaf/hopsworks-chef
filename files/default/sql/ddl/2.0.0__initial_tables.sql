@@ -1903,6 +1903,8 @@ CREATE TABLE IF NOT EXISTS `streaming_feature_group` (
   `inode_name`              VARCHAR(255)    NOT NULL,
   `partition_id`            BIGINT(20)      NOT NULL,
   `method`                  VARCHAR(255)    NOT NULL,
+  `topic_name`              VARCHAR(255)    COLLATE latin1_general_cs NOT NULL,
+  `project_id`              INT(11)         NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = ndbcluster DEFAULT CHARSET = latin1 COLLATE = latin1_general_cs;
 
