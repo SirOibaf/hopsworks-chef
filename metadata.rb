@@ -768,11 +768,18 @@ attribute "oauth/enabled",
 attribute "oauth/redirect_uri",
           :description => "OAuth redirect uri. 'hopsworks/callback' (default)",
           :type => 'string'
+attribute "oauth/logout_redirect_uri",
+          :description => "OAuth logout redirect uri. 'hopsworks/' (default)",
+          :type => 'string'
 attribute "oauth/account_status",
           :description => "Hopsworks account status given for new OAuth user. '1' verified account (default)",
           :type => 'string'
 attribute "oauth/group_mapping",
           :description => "OAuth group to hopsworks group mappings. Format: (groupA-> HOPS_USER,HOPS_ADMIN;groupB->HOPS_USER)",
+          :type => 'string'
+
+attribute "remote_auth/need_consent",
+          :description => "Remote user need to consent on first login. 'true' (default)",
           :type => 'string'
 
 attribute "hopsworks/disable_password_login",
@@ -899,6 +906,10 @@ attribute "featurestore/user",
 
 attribute "featurestore/password",
           :description => "Password for the JDBC Connection to the the Online FeatureStore"
+
+attribute "featurestore/job_activity_timer",
+          :description => "How often to run the timer to backfill jobs for feature groups and training datasets - default 5 minutes",
+          :type => 'string'
 
 # hops-util-py
 attribute "hopsworks/requests_verify",

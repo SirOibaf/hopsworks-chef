@@ -73,3 +73,27 @@ ALTER TABLE `python_dep` ADD CONSTRAINT `FK_501_510` FOREIGN KEY (`repo_id`) REF
 ALTER TABLE `python_dep` DROP INDEX `dependency`;
 ALTER TABLE `python_dep` DROP COLUMN `repo_url`;
 ALTER TABLE `python_dep` ADD CONSTRAINT `dependency` UNIQUE (`dependency`, `version`, `install_type`, `repo_id`);
+
+DROP TABLE IF EXISTS `validation_rule`;
+DROP TABLE IF EXISTS `feature_group_rule`;
+DROP TABLE IF EXISTS `feature_group_validation`;
+DROP TABLE IF EXISTS `feature_store_expectation_rule`;
+ALTER TABLE `hopsworks`.`feature_group` DROP COLUMN `validation_type`;
+
+ALTER TABLE `hopsworks`.`oauth_client` 
+DROP COLUMN `end_session_endpoint`,
+DROP COLUMN `logout_redirect_param`;
+
+DROP TABLE `feature_store_activity`;
+
+ALTER TABLE `hopsworks`.`feature_store_statistic` MODIFY `commit_time` VARCHAR(30) NOT NULL,
+    DROP COLUMN `feature_group_commit_id`,
+    DROP FOREIGN KEY `fg_ci_fk_fss`;
+
+ALTER TABLE `hopsworks`.`training_dataset` DROP COLUMN `coalesce`;
+
+ALTER TABLE `hopsworks`.`feature_store_connector` 
+DROP FOREIGN KEY `fs_connector_snowflake_fk`,
+DROP COLUMN `snowflake_id`;
+
+DROP TABLE IF EXISTS `hopsworks`.`feature_store_snowflake_connector`;

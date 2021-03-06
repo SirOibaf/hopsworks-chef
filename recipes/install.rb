@@ -427,22 +427,6 @@ remote_file "#{theDomain}/lib/#{cauth}"  do
   action :create_if_missing
 end
 
-template "#{theDomain}/docroot/404.html" do
-  source "404.html.erb"
-  owner node['glassfish']['user']
-  group node['glassfish']['group']
-  mode "444"
-  action :create
-end
-
-cookbook_file"#{theDomain}/docroot/hops_icon.png" do
-  source 'hops_icon.png'
-  owner node['glassfish']['user']
-  group node['glassfish']['group']
-  mode '0755'
-  action :create_if_missing
-end
-
 remote_directory "#{theDomain}/templates" do
   source 'hopsworks_templates'
   owner node["glassfish"]["user"]
@@ -490,14 +474,9 @@ ulimit_domain node['hopsworks']['user'] do
   end
 end
 
-
-  hopsworks_grants "reload_systemd" do
-    tables_path  ""
-    views_path ""
-    rows_path  ""
-    action :reload_systemd
+  kagent_config "glassfish-domain1" do 
+    action :systemd_reload
   end
-
 end
 
 ca_dir = node['certs']['dir']
@@ -677,7 +656,7 @@ template "#{theDomain}/bin/unzip-hdfs-files.sh" do
 end
 
 ["zip-hdfs-files.sh", "zip-background.sh", "unzip-background.sh",  "tensorboard-launch.sh",
- "tensorboard-cleanup.sh", "condasearch.sh", "pipsearch.sh", "list_environment.sh", "jupyter-kill.sh",
+ "tensorboard-cleanup.sh", "condasearch.sh", "list_environment.sh", "jupyter-kill.sh",
  "jupyter-launch.sh", "tfserving-kill.sh", "sklearn_serving-launch.sh", "sklearn_serving-kill.sh"].each do |script|
   template "#{theDomain}/bin/#{script}" do
     source "#{script}.erb"
