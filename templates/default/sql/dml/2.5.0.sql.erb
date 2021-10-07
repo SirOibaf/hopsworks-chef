@@ -2,3 +2,5 @@ REPLACE INTO `hopsworks`.`variables`(`id`, `value`) VALUES ("executions_per_job_
 REPLACE INTO `hopsworks`.`variables`(`id`, `value`) VALUES ("executions_cleaner_batch_size", "<%= node['hopsworks']['job']['executions_cleaner_batch_size'] %>");
 REPLACE INTO `hopsworks`.`variables`(`id`, `value`) VALUES ("executions_cleaner_interval_ms", "<%= node['hopsworks']['job']['executions_cleaner_interval_ms'] %>");
 REPLACE INTO `hopsworks`.`variables`(`id`, `value`) VALUES ("provenance_graph_max_size", "<%= node['hopsworks']['provenance']['graph']['max_size'] %>");
+
+REPLACE INTO `hopsworks`.`variables` (`id`, `value`) VALUES ("git_command_timeout_minutes", "<%= node['hopsworks']['git_command_timeout_minutes'] %>");
