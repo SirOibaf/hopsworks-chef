@@ -3,7 +3,7 @@ source 'https://supermarket.chef.io'
 
 metadata
 
-cookbook 'conda', github: "logicalclocks/conda-chef", branch: "3.1"
+cookbook 'conda', github: "siroibaf/conda-chef", branch: "3.1.1"
 cookbook 'kagent', github: "logicalclocks/kagent-chef", branch: "3.1"
 cookbook 'hops', github: "siroibaf/hops-hadoop-chef", branch: "3.1.1"
 cookbook 'ndb', github: "siroibaf/ndb-chef", branch: "3.1.1"
