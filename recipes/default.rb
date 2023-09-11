@@ -119,218 +119,11 @@ if node['install']['enterprise']['install'].casecmp? "true"
   end
 end
 
-if current_version.eql?("")
-
-  # Make sure the database is actually empty. Otherwise raise an error
-  ruby_block "check_db_empty" do
-    block do
-      raise "You are trying to initialize the database, but the database is not empty. Either there is a failed migration, or you forgot to set the current_version attribute"
-    end
-    only_if "#{node['ndb']['scripts_dir']}/mysql-client.sh hopsworks -e \"SHOW TABLES\" | grep project"
-  end
-
-  # New installation -> template the current version schema file
-  cookbook_file "#{theDomain}/flyway/sql/V#{target_version}__initial_tables.sql" do
-    source "sql/ddl/#{target_version}__initial_tables.sql"
-    owner node['glassfish']['user']
-    mode 0750
-    action :create
-  end
-else
-  # Current version can contain the patch version. However we don't have schemas for patch versions
-  # Which means that the `version.index` operation below will fail. To avoid this we parse the version
-  # and we replace the patch version to 0 before searching the version list.
-  version_segments = Gem::Version.new(current_version).canonical_segments()
-  version_segments[2] = 0
-  minor_version = version_segments.join('.')
-
-  minor_version_idx = versions.index(minor_version).to_i
-  versions_length = versions.length.to_i - 1
-
-  for i in (minor_version_idx + 1)..versions_length
-    # Update, template all the dml files from the current version to the target version
-    cookbook_file "#{theDomain}/flyway/sql/V#{versions[i]}__hopsworks.sql" do
-      source "sql/ddl/updates/#{versions[i]}.sql"
-      owner node['glassfish']['user']
-      mode 0750
-      action :create
-    end
-  end
-end
-
-unless node['install']['cloud'].strip.empty?
-  node.override['hopsworks']['reserved_project_names'] = "#{node['hopsworks']['reserved_project_names']},cloud"
+if node["install"]["secondary_region"].casecmp?("false")
+  include_recipe "hopsworks::db"
 end
 
 # Hopsworks CA configuration
-caConf = {}
-rootConf = {}
-if !node['hopsworks']['pki']['root']['name'].empty?
-  rootConf[:x509Name] = node['hopsworks']['pki']['root']['name']
-  rootConf[:validityDuration] = node['hopsworks']['pki']['root']['duration']
-end
-
-intermediateConf = {}
-if !node['hopsworks']['pki']['intermediate']['name'].empty?
-  intermediateConf[:x509Name] = node['hopsworks']['pki']['intermediate']['name']
-  intermediateConf[:validityDuration] = node['hopsworks']['pki']['intermediate']['duration']
-end
-
-if !node['hopsworks']['pki']['intermediate']['extra_san_for_username'].empty?
-  intermediateConf[:extraUsernameSAN] = JSON.parse(node['hopsworks']['pki']['intermediate']['extra_san_for_username'])
-end
-
-kubernetesConf = {}
-if !node['hopsworks']['pki']['kubernetes']['name'].empty?
-  kubernetesConf[:x509Name] = node['hopsworks']['pki']['kubernetes']['name']
-  kubernetesConf[:validityDuration] = node['hopsworks']['pki']['kubernetes']['duration']
-end
-
-if node['install']['kubernetes'].casecmp?('true') && node['install']['managed_kubernetes'].casecmp?('false')
-  kubernetesConf[:subjectAlternativeName] = {
-    :dns => [node['fqdn'], node['kube-hops']['cluster_name'],
-              "#{node['kube-hops']['cluster_name']}.default",
-              "#{node['kube-hops']['cluster_name']}.default.svc",
-              "#{node['kube-hops']['cluster_name']}.default.svc.cluster",
-              "#{node['kube-hops']['cluster_name']}.default.svc.cluster.local",
-              "*.hops-system.svc"
-            ],
-    :ip => [node['kube-hops']['cidr'].split('/')[0].reverse.sub('0', '1').reverse,
-              private_recipe_ip('kube-hops', 'master'),
-              "127.0.0.1",
-              node['kube-hops']['dns_ip'],
-              "10.96.0.1"]
-  }
-end
-
-caConf[:rootCA] = rootConf
-caConf[:intermediateCA] = intermediateConf
-caConf[:kubernetesCA] = kubernetesConf
-
-
-# Usernames configuration
-usernamesConfiguration = {}
-usernamesConfiguration[:glassfish] = node['hopsworks']['user']
-usernamesConfiguration[:hdfs] = node['hops']['hdfs']['user']
-usernamesConfiguration[:rmyarn] = node['hops']['rm']['user']
-usernamesConfiguration[:yarn] = node['hops']['yarn']['user']
-usernamesConfiguration[:hive] = node['hive2']['user']
-usernamesConfiguration[:livy] = node['livy']['user']
-usernamesConfiguration[:flink] = node['flink']['user']
-usernamesConfiguration[:consul] = node['consul']['user']
-usernamesConfiguration[:hopsmon] = node['hopsmonitor']['user']
-usernamesConfiguration[:zookeeper] = node['kzookeeper']['user']
-usernamesConfiguration[:onlinefs] = node['onlinefs']['user']
-usernamesConfiguration[:elastic] = node['elastic']['user']
-usernamesConfiguration[:kagent] = node['kagent']['user']
-usernamesConfiguration[:mysql] = node['ndb']['user']
-usernamesConfiguration[:airflow] = node['airflow']['user']
-if node.attribute?('flyingduck') && node['flyingduck'].attribute?('user')
-  usernamesConfiguration[:flyingduck] = node['flyingduck']['user']
-end
-
-# encrypt onlinefs user password
-onlinefs_salt = SecureRandom.base64(64)
-encrypted_onlinefs_password = Digest::SHA256.hexdigest node['onlinefs']['hopsworks']['password'] + onlinefs_salt
-
-# encrypt airflow user poassword
-airflow_salt = SecureRandom.base64(64)
-encrypted_airflow_password = Digest::SHA256.hexdigest node['airflow']['hopsworks']['password'] + airflow_salt
-
-# Check if Kafka is to be installed 
-kafka_installed = true
-begin
-  valid_recipe("kkafka", "default")
-  Chef::Log.info "Found kafka cookbooks, will proceed to create db user for Kafka"
-  kafka_installed = true
-rescue
-  Chef::Log.info "Kafka will not be installed, skipped creating DB user."
-  kafka_installed = false
-end
-
-apparmor_enabled = is_apparmor_enabled() && node['hops']['docker']['load-hopsfsmount-apparmor-profile'].casecmp?("true")
-
-for version in versions do
-  # Template DML files
-  template "#{theDomain}/flyway/dml/V#{version}__hopsworks.sql" do
-    source "sql/dml/#{version}.sql.erb"
-    owner node['glassfish']['user']
-    mode 0750
-    variables({
-         :user_cert_valid_days => node['hopsworks']['cert']['user_cert_valid_days'],
-         :conda_repo => condaRepo,
-         :hopsworks_dir => theDomain,
-         :hops_rpc_tls => hops_rpc_tls_val,
-         :yarn_default_quota => node['hopsworks']['yarn_default_quota_mins'].to_i * 60,
-         :java_home => node['java']['java_home'],
-         :public_ip => public_ip,
-         :krb_ldap_auth => node['ldap']['enabled'].to_s == "true" || node['kerberos']['enabled'].to_s == "true",
-         :hops_version => node['hops']['version'],
-         :onlinefs_password => encrypted_onlinefs_password,
-         :onlinefs_salt => onlinefs_salt,
-         :pki_ca_configuration => caConf.to_json(),
-         :usernames_configuration => usernamesConfiguration.to_json(),
-         :kafka_installed => kafka_installed,
-         :apparmor_enabled => apparmor_enabled,
-         :ha_enabled => node['hopsworks'].attribute?('das_node'),
-         :airflow_salt => airflow_salt,
-         :airflow_password => encrypted_airflow_password
-    })
-    action :create
-  end
-
-   # template all the ddl files from all versions
-   cookbook_file "#{theDomain}/flyway/all/sql/V#{version}__hopsworks.sql" do
-    source "sql/ddl/updates/#{version}.sql"
-    owner node['glassfish']['user']
-    group node['glassfish']['group']
-    mode 0750
-    action :create
-  end
-
-
-  if Gem::Version.new(version) >= Gem::Version.new('2.0.0')
-    cookbook_file "#{theDomain}/flyway/all/sql/V#{version}__initial_tables.sql" do
-      source "sql/ddl/#{version}__initial_tables.sql"
-      owner node['glassfish']['user']
-      group node['glassfish']['group']
-      mode 0750
-      action :create
-    end
-  end 
-  
-end
-
-bash "flyway_migrate" do
-  user "root"
-  cwd "#{theDomain}/flyway"
-  code <<-EOF
-    # Validation during migrate is very strict for our needs. If we found a bug
-    # on a released branch and we fix it, next time someone upgrades to released branch+1
-    # they will get a validation error because the files checksum do not match
-    #{theDomain}/flyway/flyway -validateOnMigrate=false migrate
-  EOF
-end
-
-# Run the DML sql script to insert the variables
-for version in versions do
-  bash "run_inserts_#{version}" do
-    user "root"
-    code <<-EOH
-      #{node['ndb']['scripts_dir']}/mysql-client.sh hopsworks < #{theDomain}/flyway/dml/V#{version}__hopsworks.sql
-    EOH
-  end
-end
-
-# Create the users_groups view if it doesn't exists (see HWORKS-457 for explanation)
-bash "create users_groups view" do
-  user "root"
-  code <<-EOH
-    #{node['ndb']['scripts_dir']}/mysql-client.sh hopsworks -e "CREATE OR REPLACE VIEW users_groups AS select u.username AS username, u.password AS password, u.secret AS secret, u.email AS email,g.group_name AS group_name from ((user_group ug join users u on((u.uid = ug.uid))) join bbc_group g on((g.gid = ug.gid)));"
-  EOH
-end
-
-
 ###############################################################################
 # config glassfish
 ###############################################################################
@@ -564,14 +357,6 @@ glassfish_asadmin "delete-jdbc-connection-pool --cascade featureStorePool" do
   admin_port admin_port
   secure false
   only_if "#{asadmin_cmd} list-jdbc-connection-pools | grep 'featureStorePool$'"
-end
-
-glassfish_asadmin "create-jdbc-connection-pool --restype javax.sql.DataSource --datasourceclassname com.mysql.cj.jdbc.MysqlDataSource --ping=true --isconnectvalidatereq=true --validationmethod=auto-commit --description=\"Featurestore connection pool\" --property user=#{node['featurestore']['user']}:password=#{node['featurestore']['password']}:url=\"#{node['featurestore']['hopsworks_url'].gsub(":", "\\:")}\":useSSL=false:allowPublicKeyRetrieval=true featureStorePool" do
-  domain_name domain_name
-  password_file password_file
-  username username
-  admin_port admin_port
-  secure false
 end
 
 glassfish_asadmin "create-jdbc-resource --connectionpoolid featureStorePool --description \"Featurestore jdbc resource\" jdbc/featurestore" do
@@ -951,6 +736,7 @@ ruby_block "generate_service_jwt" do
       idx += 1
     end
   end
+  only_if { node["install"]["secondary_region"].casecmp?("false") }
 end
 
 # Force variables reload
@@ -1041,4 +827,5 @@ bash 'alter_flyway_schema_history_engine' do
     set -e
     #{exec} -e \"ALTER TABLE #{node['hopsworks']['db']}.flyway_schema_history engine = 'ndb';\"
   EOF
+  only_if { node["install"]["secondary_region"].casecmp?("false") }
 end
