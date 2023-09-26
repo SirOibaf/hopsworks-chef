@@ -374,7 +374,7 @@ if current_version.eql?("") == false
     keep_state true
     enabled true
     secure true
-    only_if "#{asadmin_cmd} list-applications --type ejb #{deployment_group} | grep -w \"hopsworks-ear:#{node['hopsworks']['current_version']}\""
+    only_if "#{asadmin_cmd} list-applications --type ejb | grep -w \"hopsworks-ear:#{node['hopsworks']['current_version']}\""
   end
 
   glassfish_deployable "hopsworks" do
