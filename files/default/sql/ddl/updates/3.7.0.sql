@@ -1,0 +1,1 @@
+ALTER TABLE `hopsworks`.`hosts` DROP COLUMN `agent_password`;

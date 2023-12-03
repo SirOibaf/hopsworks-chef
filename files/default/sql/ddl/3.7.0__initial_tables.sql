@@ -485,7 +485,6 @@ CREATE TABLE `hosts` (
                          `memory_capacity` bigint(20) DEFAULT NULL,
                          `private_ip` varchar(15) COLLATE latin1_general_cs DEFAULT NULL,
                          `public_ip` varchar(15) COLLATE latin1_general_cs DEFAULT NULL,
-                         `agent_password` varchar(25) COLLATE latin1_general_cs DEFAULT NULL,
                          `num_gpus` tinyint(1) DEFAULT '0',
                          `registered` tinyint(1) DEFAULT '0',
                          PRIMARY KEY (`id`),
